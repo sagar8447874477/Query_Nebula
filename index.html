@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ABM PAPERS PVT LTD | Paper & Cardboard Supplier</title>
+  <meta name="description" content="ABM PAPERS PVT LTD is a professional supplier of paper and cardboard products for packaging, business, and commercial requirements." />
+
+  <meta property="og:title" content="ABM PAPERS PVT LTD | Paper & Cardboard Supplier" />
+  <meta property="og:description" content="Professional supplier of paper and cardboard products for packaging, industrial, and business requirements." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yourusername.github.io/repository-name/" />
+
+  <style>
+    :root {
+      --bg-1: #fffdf7;
+      --bg-2: #fff7ed;
+      --bg-3: #eff6ff;
+      --bg-4: #f0fdf4;
+      --surface: rgba(255, 255, 255, 0.82);
+      --surface-strong: rgba(255, 255, 255, 0.92);
+      --text: #1f2937;
+      --muted: #5f6b7a;
+      --primary: #f59e0b;
+      --primary-dark: #d97706;
+      --secondary: #3b82f6;
+      --accent: #22c55e;
+      --pink: #f472b6;
+      --border: rgba(255, 255, 255, 0.6);
+      --shadow: 0 10px 30px rgba(31, 41, 55, 0.08);
+      --shadow-lg: 0 20px 50px rgba(31, 41, 55, 0.10);
+      --radius: 22px;
+      --max: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      line-height: 1.6;
+      background:
+        radial-gradient(circle at 10% 20%, rgba(245, 158, 11, 0.14), transparent 0 24%),
+        radial-gradient(circle at 85% 15%, rgba(59, 130, 246, 0.14), transparent 0 26%),
+        radial-gradient(circle at 80% 80%, rgba(34, 197, 94, 0.12), transparent 0 22%),
+        radial-gradient(circle at 20% 85%, rgba(244, 114, 182, 0.10), transparent 0 20%),
+        linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 35%, var(--bg-3) 68%, var(--bg-4) 100%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.22;
+      z-index: -1;
+      animation: floatBlob 16s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    body::before {
+      top: 80px;
+      right: -90px;
+      background: rgba(96, 165, 250, 0.28);
+    }
+
+    body::after {
+      left: -100px;
+      bottom: 40px;
+      background: rgba(251, 191, 36, 0.24);
+      animation-delay: -7s;
+    }
+
+    @keyframes floatBlob {
+      0%, 100% {
+        transform: translateY(0px) translateX(0px) scale(1);
+      }
+      50% {
+        transform: translateY(-18px) translateX(12px) scale(1.05);
+      }
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .container {
+      width: min(92%, var(--max));
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.68);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 0;
+    }
+
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      color: var(--primary-dark);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #334155;
+      padding: 8px 12px;
+      border-radius: 999px;
+      transition: 0.25s ease;
+    }
+
+    .nav-links a:hover {
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--secondary);
+    }
+
+    .hero {
+      padding: 84px 0 56px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 9px 15px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: #9a3412;
+      background: linear-gradient(135deg, #fde68a, #fed7aa);
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      line-height: 1.12;
+      margin-bottom: 16px;
+      color: #172033;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 58ch;
+      margin-bottom: 24px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 13px 20px;
+      border-radius: 999px;
+      font-weight: 800;
+      transition: transform 0.2s ease, box-shadow 0.25s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      color: white;
+      background: linear-gradient(135deg, #f59e0b, #fb7185);
+    }
+
+    .btn-secondary {
+      color: white;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    }
+
+    .hero-card {
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 30px;
+      box-shadow: var(--shadow-lg);
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.10), rgba(59, 130, 246, 0.08), rgba(34, 197, 94, 0.08));
+      pointer-events: none;
+    }
+
+    .hero-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card h3 {
+      color: var(--secondary);
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+
+    .hero-card ul {
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    section {
+      padding: 64px 0;
+    }
+
+    .section-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 34px;
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      color: #172033;
+    }
+
+    .section-text {
+      color: var(--muted);
+      max-width: 72ch;
+      margin-bottom: 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+      color: #1e293b;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .products .card:nth-child(1) {
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,247,237,0.92));
+      border-top: 6px solid var(--primary);
+    }
+
+    .products .card:nth-child(2) {
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(239,246,255,0.92));
+      border-top: 6px solid var(--secondary);
+    }
+
+    .products .card:nth-child(3) {
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(240,253,244,0.92));
+      border-top: 6px solid var(--accent);
+    }
+
+    .why-band {
+      background: linear-gradient(135deg, rgba(255,247,237,0.7), rgba(239,246,255,0.7), rgba(240,253,244,0.7));
+      border-radius: 30px;
+      padding: 30px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+
+    .contact-box {
+      background: linear-gradient(135deg, rgba(59,130,246,0.92), rgba(14,165,233,0.88), rgba(34,197,94,0.82));
+      color: white;
+      border-radius: 30px;
+      padding: 34px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .contact-box h2 {
+      font-size: 2rem;
+      margin-bottom: 14px;
+    }
+
+    .contact-box p {
+      max-width: 70ch;
+    }
+
+    .contact-details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .contact-item {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    footer {
+      padding: 30px 0;
+      text-align: center;
+      color: #475569;
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 860px) {
+      .hero-grid,
+      .grid-3,
+      .contact-details {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .section-panel,
+      .why-band,
+      .contact-box {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container nav">
+      <div class="logo">ABM PAPERS PVT LTD</div>
+      <nav class="nav-links">
+        <a href="#about">About</a>
+        <a href="#products">Products</a>
+        <a href="#why-us">Why Choose Us</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="badge">Paper & Cardboard Supplier</span>
+          <h1>Reliable paper and cardboard supply for business and packaging needs.</h1>
+          <p>
+            ABM PAPERS PVT LTD supplies paper and cardboard products for packaging, trading, and routine commercial requirements. We focus on dependable communication, practical service, and consistent business support.
+          </p>
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn-primary">Contact Us</a>
+            <a href="#products" class="btn btn-secondary">View Services</a>
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <h3>Business Overview</h3>
+          <ul>
+            <li>Supplier of paper and cardboard products</li>
+            <li>Focused on packaging and commercial supply requirements</li>
+            <li>Professional business presence for enquiries and communication</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="section-panel">
+          <h2 class="section-title">About Us</h2>
+          <p class="section-text">
+            ABM PAPERS PVT LTD is engaged in the supply of paper and cardboard materials for business and commercial use. Our approach is simple and professional, with emphasis on clear communication, practical support, and consistent service for supply-related requirements.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="products" class="products">
+      <div class="container">
+        <div class="section-panel">
+          <h2 class="section-title">Products & Services</h2>
+          <p class="section-text">
+            We support businesses looking for paper and cardboard products for packaging, storage, operations, and general business supply needs.
+          </p>
+
+          <div class="grid-3">
+            <div class="card">
+              <h3>Paper Supply</h3>
+              <p>
+                Supply of paper materials for commercial, office, packaging, and operational use.
+              </p>
+            </div>
+            <div class="card">
+              <h3>Cardboard Materials</h3>
+              <p>
+                Supply of cardboard products suitable for packaging support, storage, and handling requirements.
+              </p>
+            </div>
+            <div class="card">
+              <h3>Business Enquiries</h3>
+              <p>
+                Professional coordination for supply discussions, general product enquiries, and business communication.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="why-us">
+      <div class="container">
+        <div class="why-band">
+          <h2 class="section-title">Why Choose Us</h2>
+          <div class="grid-3">
+            <div class="card">
+              <h3>Clear Communication</h3>
+              <p>
+                We maintain a straightforward approach to product enquiries and business coordination.
+              </p>
+            </div>
+            <div class="card">
+              <h3>Relevant Product Focus</h3>
+              <p>
+                Our business presence is centered around actual paper and cardboard supply requirements.
+              </p>
+            </div>
+            <div class="card">
+              <h3>Professional Presence</h3>
+              <p>
+                This website presents visible company information and contact details for business communication.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <div class="contact-box">
+          <h2>Contact Us</h2>
+          <p>
+            For business enquiries, supply discussions, or product-related communication, please connect using the details below.
+          </p>
+
+          <div class="contact-details">
+            <div class="contact-item">
+              <strong>Company Name</strong><br />
+              ABM PAPERS PVT LTD
+            </div>
+            <div class="contact-item">
+              <strong>Email</strong><br />
+              info@abmpapers.in
+            </div>
+            <div class="contact-item">
+              <strong>Phone</strong><br />
+              +91 98765 43210
+            </div>
+            <div class="contact-item">
+              <strong>Address</strong><br />
+              204, Industrial Area Phase II, New Delhi, Delhi 110020, India
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      © 2026 ABM PAPERS PVT LTD. All rights reserved.
+    </div>
+  </footer>
+
+</body>
+</html>
