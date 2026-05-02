@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Device Streak SQL Question Explainer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07111f;--bg2:#0b1830;--panel:#0f1c33cc;--panel-solid:#111f39;--panel-soft:#152645;--text:#ecf4ff;--muted:#a9bbdf;--faint:#6f85ac;--line:rgba(255,255,255,.09);--cyan:#56dfff;--violet:#8a6bff;--pink:#ff69c7;--green:#63f3b1;--gold:#ffc96b;--danger:#ff7f9d;--shadow:0 12px 45px rgba(0,0,0,.35);--glow:0 0 24px rgba(86,223,255,.18),0 0 70px rgba(138,107,255,.13);--radius:24px;--radius-sm:16px;
+    }
+    *{box-sizing:border-box} html,body{margin:0;padding:0;min-height:100%;font-family:'Inter',sans-serif;color:var(--text);background:radial-gradient(circle at top,#13254b 0%,#091120 34%,#040811 100%)} body{overflow-x:hidden}
+    .stars,.stars:before,.stars:after{position:fixed;inset:0;content:"";pointer-events:none;display:block}
+    .stars{background-image:radial-gradient(2px 2px at 40px 30px, rgba(255,255,255,.9), transparent 60%),radial-gradient(1px 1px at 180px 80px, rgba(86,223,255,.9), transparent 60%),radial-gradient(1.5px 1.5px at 360px 170px, rgba(255,105,199,.8), transparent 60%),radial-gradient(2px 2px at 520px 60px, rgba(255,255,255,.85), transparent 60%),radial-gradient(1px 1px at 740px 180px, rgba(138,107,255,.95), transparent 60%),radial-gradient(2px 2px at 920px 110px, rgba(86,223,255,.75), transparent 60%),radial-gradient(1px 1px at 1120px 230px, rgba(255,255,255,.75), transparent 60%);background-size:1200px 320px;animation:drift 90s linear infinite;opacity:.8}
+    .stars:before{background-image:radial-gradient(2px 2px at 70px 100px, rgba(255,255,255,.85), transparent 60%),radial-gradient(1px 1px at 250px 50px, rgba(255,255,255,.72), transparent 60%),radial-gradient(2px 2px at 430px 150px, rgba(86,223,255,.85), transparent 60%),radial-gradient(1px 1px at 670px 40px, rgba(255,105,199,.85), transparent 60%),radial-gradient(1px 1px at 980px 160px, rgba(255,255,255,.8), transparent 60%);background-size:1000px 260px;animation:driftReverse 125s linear infinite;opacity:.52}
+    .stars:after{background:radial-gradient(circle at 20% 20%, rgba(86,223,255,.18), transparent 26%),radial-gradient(circle at 80% 14%, rgba(138,107,255,.16), transparent 24%),radial-gradient(circle at 60% 80%, rgba(255,105,199,.12), transparent 20%);filter:blur(26px)}
+    @keyframes drift{from{transform:translateY(0)}to{transform:translateY(320px)}} @keyframes driftReverse{from{transform:translateY(0)}to{transform:translateY(-260px)}} @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}} @keyframes pulse{0%,100%{box-shadow:0 0 0 rgba(86,223,255,0)}50%{box-shadow:0 0 30px rgba(86,223,255,.25)}}
+    .wrap{position:relative;z-index:1;max-width:1260px;margin:0 auto;padding:24px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;border:1px solid var(--line);background:rgba(10,18,35,.58);backdrop-filter:blur(16px);border-radius:999px;box-shadow:var(--shadow);position:sticky;top:18px;z-index:10}
+    .brand{display:flex;align-items:center;gap:14px;font-weight:700}.brand-badge{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),var(--violet));display:grid;place-items:center;box-shadow:var(--glow);animation:float 5s ease-in-out infinite}.brand-badge svg{width:24px;height:24px}.top nav{display:flex;gap:18px;flex-wrap:wrap}.top a{text-decoration:none;color:var(--muted);font-size:.94rem}.top a:hover{color:var(--text)}
+    .glass{background:linear-gradient(180deg, rgba(15,28,51,.9), rgba(11,20,37,.82));backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .hero{padding:56px 0 26px;display:grid;grid-template-columns:1.08fr .92fr;gap:22px;align-items:center}.eyebrow{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);font-size:.82rem;text-transform:uppercase;letter-spacing:.09em;color:#c8d8ff} h1{font-family:'Sora',sans-serif;font-size:clamp(2.4rem,5vw,4.8rem);line-height:1.02;letter-spacing:-.05em;margin:18px 0 0;max-width:12ch} .hero p{margin-top:16px;color:var(--muted);max-width:65ch;font-size:1.04rem}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.chip{padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);font-size:.92rem;color:#dbe7ff}
+    .question-card{padding:24px;position:relative;overflow:hidden}.question-card:before{content:"";position:absolute;width:180px;height:180px;right:-36px;top:-36px;border-radius:50%;background:radial-gradient(circle, rgba(86,223,255,.16), transparent 66%)} .question-card h2{font-family:'Sora',sans-serif;font-size:1.6rem;margin:0 0 10px}.question-box{padding:18px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);line-height:1.7;color:#eef6ff}.summary-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}.summary-item{padding:16px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)} .summary-item strong{display:block;font-size:1.35rem;margin-top:4px}
+    .section{padding:18px 0 8px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:16px}.section-head h2{font-family:'Sora',sans-serif;font-size:1.9rem;margin:0}.section-head p{margin:0;color:var(--muted);max-width:60ch}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{padding:22px}.panel h3{font-family:'Sora',sans-serif;margin:0 0 10px;font-size:1.18rem}.muted{color:var(--muted)}
+    .table-wrap{overflow:auto;border-radius:18px;border:1px solid rgba(255,255,255,.08)} table{width:100%;border-collapse:collapse;background:rgba(255,255,255,.02)} th,td{padding:13px 15px;border-bottom:1px solid rgba(255,255,255,.07);text-align:left;font-size:.93rem;vertical-align:top} th{background:rgba(255,255,255,.05);color:#f6f9ff}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;font-size:.78rem;border:1px solid rgba(255,255,255,.08)} .b1{background:rgba(255,201,107,.12);color:#ffd58d}.b2{background:rgba(99,243,177,.12);color:#a9ffd3}.b3{background:rgba(86,223,255,.12);color:#baf4ff}
+    .flow{display:grid;grid-template-columns:1fr 48px 1fr 48px 1fr 48px 1fr;gap:10px;align-items:stretch}.node{padding:18px;border-radius:20px;background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden}.node:before{content:"";position:absolute;inset:auto -20% -30% auto;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle, rgba(138,107,255,.18), transparent 66%)} .node h4{margin:0 0 8px;font-size:1.05rem}.arrow{display:grid;place-items:center;font-size:1.8rem;color:#9cecff}
+    .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.step{padding:18px;border-radius:20px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);position:relative;overflow:hidden}.step:before{content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:linear-gradient(90deg,var(--cyan),var(--violet),transparent)} .num{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--violet));font-weight:800;color:#06111d;margin-bottom:10px;animation:pulse 4s ease-in-out infinite}
+    pre{margin:0;padding:20px;overflow:auto;background:#07101f;border-radius:22px;border:1px solid rgba(255,255,255,.08);color:#e5eeff;font-size:.92rem;line-height:1.62;box-shadow:var(--shadow)} code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}
+    .timeline{display:grid;gap:12px}.time{display:grid;grid-template-columns:42px 1fr;gap:12px}.icon{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(86,223,255,.18),rgba(138,107,255,.22));border:1px solid rgba(255,255,255,.08);font-weight:700}
+    .footer{padding:34px 0 42px;color:var(--faint);text-align:center}
+    @media (max-width:1100px){.hero,.grid-2,.steps,.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg)}.section-head{flex-direction:column;align-items:start}}
+    @media (max-width:720px){.wrap{padding:16px}.top{border-radius:24px;align-items:flex-start}.top nav{display:none}.summary-grid{grid-template-columns:1fr}h1{max-width:14ch}}
+  </style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="top glass">
+      <div class="brand">
+        <div class="brand-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18h16"/><path d="M7 15l3-3 2 2 5-6"/></svg>
+        </div>
+        <div>
+          <div>SQL Streak Explainer</div>
+          <small style="color:var(--faint)">Animated walkthrough of your original question</small>
+        </div>
+      </div>
+      <nav>
+        <a href="#question">Question</a>
+        <a href="#example">Example</a>
+        <a href="#logic">Logic</a>
+        <a href="#query">Complete query</a>
+      </nav>
+    </header>
+
+    <section class="hero" id="question">
+      <div>
+        <span class="eyebrow">Original interview-style SQL question</span>
+        <h1>Find the maximum streak count of every device.</h1>
+        <p>This page explains your exact earlier problem: a table contains <code>device_id</code> and <code>date</code>, and a row exists only when the app was opened. The goal is to find the longest run of consecutive dates for each device.</p>
+        <div class="chips">
+          <span class="chip">Input: daily_entry(device_id, date)</span>
+          <span class="chip">Goal: longest consecutive streak</span>
+          <span class="chip">Method: LAG + flag + running SUM + MAX</span>
+        </div>
+      </div>
+      <aside class="question-card glass">
+        <h2>Your question</h2>
+        <div class="question-box">YOU ARE GIVEN A TABLE (DAILY ENTRY) WHICH CONTAINS 2 COLUMNS (DEVICE_ID, DATE), A DEVICE_ID CAN ONLY BE IN THE TABLE IF IT OPENS THE APP. I NEED TO FIND OUT THE MAXIMUM STREAK COUNT OF EVERY DEVICE. GIVE ME A STEP BY STEP SOLUTION IN A SQL QUERY.</div>
+        <div class="summary-grid">
+          <div class="summary-item"><span class="muted">Wrong shortcut</span><strong>diff = 1</strong><span class="muted">Counts pairs, not full streak groups.</span></div>
+          <div class="summary-item"><span class="muted">Correct idea</span><strong>Group streaks</strong><span class="muted">Each streak block needs its own ID.</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="example">
+      <div class="section-head">
+        <div>
+          <h2>Example table</h2>
+          <p>Use one sample device first so the streak logic becomes visible before we generalize it to all devices.</p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <article class="panel glass">
+          <h3>Input rows</h3>
+          <p class="muted">A row exists only on dates when the app was opened.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>device_id</th><th>date</th></tr></thead>
+              <tbody>
+                <tr><td>A</td><td>2026-04-01</td></tr>
+                <tr><td>A</td><td>2026-04-02</td></tr>
+                <tr><td>A</td><td>2026-04-04</td></tr>
+                <tr><td>A</td><td>2026-04-05</td></tr>
+                <tr><td>A</td><td>2026-04-06</td></tr>
+                <tr><td>B</td><td>2026-04-03</td></tr>
+                <tr><td>B</td><td>2026-04-04</td></tr>
+                <tr><td>B</td><td>2026-04-10</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+        <article class="panel glass">
+          <h3>Expected output</h3>
+          <p class="muted">Device A has streaks of lengths 2 and 3, so the answer is 3. Device B has streaks of lengths 2 and 1, so the answer is 2.</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>device_id</th><th>max_streak</th><th>Why</th></tr></thead>
+              <tbody>
+                <tr><td>A</td><td>3</td><td>2026-04-04 to 2026-04-06</td></tr>
+                <tr><td>B</td><td>2</td><td>2026-04-03 to 2026-04-04</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="logic">
+      <div class="section-head">
+        <div>
+          <h2>Visual logic</h2>
+          <p>The final query works because it first detects where a streak breaks, then assigns a streak ID, then counts each streak, and finally takes the maximum.</p>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="num">1</div><h3>Use LAG()</h3><p class="muted">Look at the previous date for the same <code>device_id</code>.</p></div>
+        <div class="step"><div class="num">2</div><h3>Flag breaks</h3><p class="muted">If previous date is not exactly one day before current date, start a new streak.</p></div>
+        <div class="step"><div class="num">3</div><h3>Build streak_id</h3><p class="muted">Take a running sum of the new-streak flag so consecutive rows share one group ID.</p></div>
+        <div class="step"><div class="num">4</div><h3>Count and max</h3><p class="muted">Count rows per streak_id, then take <code>MAX(streak_length)</code> per device.</p></div>
+      </div>
+
+      <article class="panel glass" style="margin-top:18px;">
+        <h3>Flow diagram</h3>
+        <div class="flow" style="margin-top:14px;">
+          <div class="node"><h4>Raw dates</h4><p class="muted">A: 01, 02, 04, 05, 06</p></div>
+          <div class="arrow">→</div>
+          <div class="node"><h4>Add prev_date</h4><p class="muted">NULL, 01, 02, 04, 05</p></div>
+          <div class="arrow">→</div>
+          <div class="node"><h4>Flag new streak</h4><p class="muted">1, 0, 1, 0, 0</p></div>
+          <div class="arrow">→</div>
+          <div class="node"><h4>Group and count</h4><p class="muted">IDs: 1,1,2,2,2 → lengths 2 and 3</p></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="grid-2">
+        <article class="panel glass">
+          <h3>Step 1 and Step 2 in table form</h3>
+          <p class="muted">This table shows exactly what the query calculates before grouping the rows.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>date</th><th>prev_date</th><th>check</th><th>new_streak_flag</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>2026-04-01</td><td>NULL</td><td><span class="badge b1">First row</span></td><td>1</td></tr>
+                <tr><td>2026-04-02</td><td>2026-04-01</td><td><span class="badge b2">Consecutive</span></td><td>0</td></tr>
+                <tr><td>2026-04-04</td><td>2026-04-02</td><td><span class="badge b1">Gap found</span></td><td>1</td></tr>
+                <tr><td>2026-04-05</td><td>2026-04-04</td><td><span class="badge b2">Consecutive</span></td><td>0</td></tr>
+                <tr><td>2026-04-06</td><td>2026-04-05</td><td><span class="badge b2">Consecutive</span></td><td>0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </article>
+        <article class="panel glass">
+          <h3>Step 3 and Step 4 in table form</h3>
+          <p class="muted">A running sum turns the flags into streak groups, and then each group is counted.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>date</th><th>new_streak_flag</th><th>streak_id</th><th>streak_length group</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>2026-04-01</td><td>1</td><td>1</td><td rowspan="2">2</td></tr>
+                <tr><td>2026-04-02</td><td>0</td><td>1</td></tr>
+                <tr><td>2026-04-04</td><td>1</td><td>2</td><td rowspan="3">3</td></tr>
+                <tr><td>2026-04-05</td><td>0</td><td>2</td></tr>
+                <tr><td>2026-04-06</td><td>0</td><td>2</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="muted" style="margin-top:12px;">For device A, the maximum among streak lengths 2 and 3 is 3.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="query">
+      <div class="section-head">
+        <div>
+          <h2>Complete SQL query</h2>
+          <p>This is the full query, not the incomplete version. It includes grouping the streaks and finding the maximum streak for every device.</p>
+        </div>
+      </div>
+      <pre><code>WITH ordered_data AS (
+    SELECT
+        device_id,
+        date,
+        LAG(date) OVER (
+            PARTITION BY device_id
+            ORDER BY date
+        ) AS prev_date
+    FROM daily_entry
+),
+flagged AS (
+    SELECT
+        device_id,
+        date,
+        CASE
+            WHEN prev_date = date - INTERVAL '1 day' THEN 0
+            ELSE 1
+        END AS new_streak_flag
+    FROM ordered_data
+),
+grouped AS (
+    SELECT
+        device_id,
+        date,
+        SUM(new_streak_flag) OVER (
+            PARTITION BY device_id
+            ORDER BY date
+        ) AS streak_id
+    FROM flagged
+),
+streak_lengths AS (
+    SELECT
+        device_id,
+        streak_id,
+        COUNT(*) AS streak_length
+    FROM grouped
+    GROUP BY device_id, streak_id
+)
+SELECT
+    device_id,
+    MAX(streak_length) AS max_streak
+FROM streak_lengths
+GROUP BY device_id
+ORDER BY device_id;</code></pre>
+    </section>
+
+    <section class="section">
+      <div class="section-head">
+        <div>
+          <h2>Why your earlier query was incomplete</h2>
+          <p>The issue was not only syntax. The bigger problem was that counting rows with <code>diff = 1</code> does not produce complete streak groups.</p>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="time"><div class="icon">1</div><div><strong>You detected adjacency, not full streaks.</strong><div class="muted">Rows where the date difference is 1 only tell you that two rows are consecutive. They do not identify where one streak ends and another begins.</div></div></div>
+        <div class="time"><div class="icon">2</div><div><strong>The first row of each device was missing from the count.</strong><div class="muted">A streak of length 3 has 3 rows but only 2 adjacent pairs, so counting <code>diff = 1</code> undercounts the true streak length.</div></div></div>
+        <div class="time"><div class="icon">3</div><div><strong>You needed a streak group identifier.</strong><div class="muted">The running sum of a new-streak flag is what converts row-by-row comparisons into complete streak blocks.</div></div></div>
+      </div>
+    </section>
+
+    <footer class="footer">Built as an animated dark-theme explainer for your original device streak SQL question.</footer>
+  </div>
+</body>
+</html>
